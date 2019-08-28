@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Turvo</string>
+    <string name="main_ticker_hint">Ticker symbols</string>
+    <string name="main_ticker_desc">E.g. GOOG, TSLA, LC</string>
+    <string name="main_button_next">Next</string>
+    <string name="main_error_limit">Limit 5 tickers!</string>
+    <string name="main_error_empty">Empty field!</string>
+    <string name="ticker_list_title">Portfolio</string>
+    <string name="ticker_details_title">Details</string>
+</resources>
