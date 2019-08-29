@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.itechart.turvo.helper.Transaction
 import com.itechart.turvo.helper.changeTo
-import com.itechart.turvo.ui.list.TickerListFragment
+import com.itechart.turvo.ui.list.ListFragment
 import com.itechart.turvo.ui.main.MainFragment
 
 class MainActivity : AppCompatActivity() {
@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity() {
 
     fun navigateToList(data: String) {
         changeTo(
-            TickerListFragment.newInstance(data),
+            ListFragment.newInstance(data),
             transaction = Transaction.SLIDE_END,
             withBack = true
         )

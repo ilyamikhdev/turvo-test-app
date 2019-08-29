@@ -34,7 +34,7 @@ class DummyContent(tickers: String?) {
 
     private fun makePriceList(): List<Double> {
         val priceList = mutableListOf<Double>()
-        repeat((0..10).count()) {
+        repeat((0..9).count()) {
             priceList.add(getRandomPrice())
         }
         return priceList

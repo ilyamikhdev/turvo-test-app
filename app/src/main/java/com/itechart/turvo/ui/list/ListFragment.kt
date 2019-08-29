@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.transition.Fade
@@ -14,12 +15,25 @@ import com.itechart.turvo.helper.addSharedElementTransition
 import com.itechart.turvo.helper.changeTo
 import com.itechart.turvo.ui.BaseFragment
 import com.itechart.turvo.ui.detail.DetailsFragment
-import com.itechart.turvo.ui.list.dummy.DummyContent
 import com.itechart.turvo.ui.list.dummy.DummyContent.DummyItem
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 
-class TickerListFragment : BaseFragment() {
+class ListFragment : BaseFragment() {
     private var argTickers: String? = null
+    private val viewModel: ListViewModel by viewModel { parametersOf(argTickers) }
+
+    private lateinit var adapter: TickerRecyclerViewAdapter
+
+    companion object {
+        const val ARG_TICKERS = "tickers"
+        fun newInstance(tickers: String) = ListFragment().apply {
+            arguments = Bundle().apply {
+                putString(ARG_TICKERS, tickers)
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,14 +48,14 @@ class TickerListFragment : BaseFragment() {
 
         val onItemClick = object : OnListFragmentInteractionListener {
             override fun onListFragmentInteraction(
-                item: DummyItem?,
+                item: DummyItem,
                 sharedViews: Map<String, View>
             ) {
                 getBaseActivity()?.changeTo(
                     fragment = DetailsFragment.newInstance(item).addSharedElementTransition(
                         DefaultTransition(),
                         Fade(),
-                        this@TickerListFragment
+                        this@ListFragment
                     ),
                     withBack = true,
                     transaction = Transaction.NONE,
@@ -51,13 +65,12 @@ class TickerListFragment : BaseFragment() {
         }
 
         if (view is RecyclerView) {
+            adapter = TickerRecyclerViewAdapter(emptyList(), onItemClick)
+                .apply { setHasStableIds(true) }
             with(view) {
                 layoutManager = LinearLayoutManager(context)
                 setHasFixedSize(true)
-                adapter = TickerRecyclerViewAdapter(
-                    DummyContent(argTickers).items,
-                    onItemClick
-                ).apply { setHasStableIds(true) }
+                adapter = this@ListFragment.adapter
             }
         }
         return view
@@ -68,20 +81,15 @@ class TickerListFragment : BaseFragment() {
         getBaseActivity()?.supportActionBar?.title = getString(R.string.ticker_list_title)
         getBaseActivity()?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         getBaseActivity()?.supportActionBar?.show()
+
+        viewModel.formState.observe(this, Observer {
+            adapter.values = it
+            adapter.notifyDataSetChanged()
+
+        })
     }
 
     interface OnListFragmentInteractionListener {
-        fun onListFragmentInteraction(item: DummyItem?, sharedViews: Map<String, View>)
-    }
-
-    companion object {
-        const val ARG_TICKERS = "tickers"
-        @JvmStatic
-        fun newInstance(tickers: String) =
-            TickerListFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_TICKERS, tickers)
-                }
-            }
+        fun onListFragmentInteraction(item: DummyItem, sharedViews: Map<String, View>)
     }
 }
