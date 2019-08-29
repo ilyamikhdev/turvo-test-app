@@ -21,10 +21,13 @@ class DetailsViewModel(item: Ticker) : ViewModel() {
 
     init {
         viewModelScope.launch {
+            if (item.prices.isNullOrEmpty())
+                return@launch
+
             _form.value = ListItemTicker(
                 item = item,
                 id = item.id,
-                title = item.ticker,
+                title = item.name,
                 price = item.prices.lastOrNull()?.toString() ?: "",
                 dataSets = getChartDataSets(item.prices)
             )

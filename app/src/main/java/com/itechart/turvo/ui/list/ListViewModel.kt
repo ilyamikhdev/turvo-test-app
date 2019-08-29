@@ -8,27 +8,27 @@ import androidx.lifecycle.viewModelScope
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
-import com.itechart.turvo.repository.DummyContent
+import com.itechart.turvo.repository.Repository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class ListViewModel(private val tickers: String) : ViewModel() {
+class ListViewModel(private val tickers: String, private val repository: Repository) : ViewModel() {
     private val _form = MutableLiveData<List<ListItemTicker>>()
     val formState: LiveData<List<ListItemTicker>> = _form
 
     init {
         viewModelScope.launch {
-            _form.value = generateData()
+            _form.value = loadData()
         }
     }
 
-    private suspend fun generateData() = withContext(Dispatchers.IO) {
-        DummyContent(tickers, 10).tickersList.map {
+    private suspend fun loadData() = withContext(Dispatchers.IO) {
+        repository.getData(tickers).map {
             ListItemTicker(
                 item = it,
                 id = it.id,
-                title = it.ticker,
+                title = it.name,
                 price = it.prices.lastOrNull()?.toString() ?: "",
                 dataSets = getChartDataSets(it.prices)
             )

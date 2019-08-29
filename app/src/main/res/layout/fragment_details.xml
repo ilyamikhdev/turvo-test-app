@@ -26,18 +26,18 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
-            android:text="Ticker"
             android:textSize="25sp"
-            android:transitionName="item_ticker" />
+            android:transitionName="item_ticker"
+            tools:text="Ticker" />
 
         <TextView
             android:id="@+id/tv_details_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Price"
             android:textSize="25sp"
             android:textStyle="bold"
-            android:transitionName="item_price" />
+            android:transitionName="item_price"
+            tools:text="Price" />
 
     </LinearLayout>
 

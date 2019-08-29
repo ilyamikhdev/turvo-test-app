@@ -6,6 +6,7 @@ import com.itechart.turvo.di.appModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
+import ru.mealty.di.serverModule
 
 open class AppBase : Application() {
 
@@ -14,7 +15,7 @@ open class AppBase : Application() {
         startKoin {
             androidLogger()
             androidContext(this@AppBase)
-            modules(listOf(appModule))
+            modules(listOf(appModule, serverModule))
         }
         Utils.init(this)
     }

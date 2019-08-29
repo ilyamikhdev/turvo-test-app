@@ -20,6 +20,13 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+        debug {
+            minifyEnabled false
+            buildConfigField "String", "API_URL", "\"https://www.alphavantage.co/\""
+            buildConfigField "String", "API_KEY", "\"13MFUGNDCDVA0ISN\""
+            buildConfigField "Boolean", "IS_DUMMY", "false"
+            debuggable true
+        }
     }
 
     compileOptions {
@@ -58,6 +65,12 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
 
     implementation 'com.jakewharton.rxbinding3:rxbinding:3.0.0'
+
+    def retrofit_version = '2.6.1'
+    implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.1.0'
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.1'

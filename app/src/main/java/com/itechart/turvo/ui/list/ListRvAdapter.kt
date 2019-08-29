@@ -14,10 +14,10 @@ import com.itechart.turvo.entity.Ticker
 import com.itechart.turvo.ui.list.ListFragment.OnListFragmentInteractionListener
 import kotlinx.android.synthetic.main.item_ticker.view.*
 
-class TickerRecyclerViewAdapter(
+class ListRvAdapter(
     var values: List<ListItemTicker>,
     private val listener: OnListFragmentInteractionListener?
-) : RecyclerView.Adapter<TickerRecyclerViewAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<ListRvAdapter.ViewHolder>() {
 
     private val onClickListener: View.OnClickListener
 

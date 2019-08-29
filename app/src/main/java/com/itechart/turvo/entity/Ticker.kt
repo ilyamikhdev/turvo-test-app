@@ -6,6 +6,6 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 data class Ticker(
     val id: Int,
-    val ticker: String,
+    val name: String,
     val prices: List<Double>
 ) : Parcelable

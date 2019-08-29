@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Turvo</string>
     <string name="main_ticker_hint">Ticker symbols</string>
-    <string name="main_ticker_desc">E.g. GOOG, TSLA, LC</string>
+    <string name="main_ticker_desc">E.g. GOOG, TSLA, LC, AAPL, EPAM, BBY</string>
     <string name="main_button_next">Next</string>
     <string name="main_error_limit">Limit 5 tickers!</string>
     <string name="main_error_empty">Empty field!</string>
