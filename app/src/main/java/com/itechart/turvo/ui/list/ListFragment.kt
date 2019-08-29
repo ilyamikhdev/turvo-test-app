@@ -10,8 +10,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.transition.Fade
 import com.itechart.turvo.R
+import com.itechart.turvo.entity.Ticker
 import com.itechart.turvo.helper.*
-import com.itechart.turvo.repository.DummyContent.DummyItem
 import com.itechart.turvo.ui.BaseFragment
 import com.itechart.turvo.ui.detail.DetailsFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -46,7 +46,7 @@ class ListFragment : BaseFragment() {
 
         val onItemClick = object : OnListFragmentInteractionListener {
             override fun onListFragmentInteraction(
-                item: DummyItem,
+                item: Ticker,
                 sharedViews: Map<String, View>
             ) {
 
@@ -96,6 +96,6 @@ class ListFragment : BaseFragment() {
     }
 
     interface OnListFragmentInteractionListener {
-        fun onListFragmentInteraction(item: DummyItem, sharedViews: Map<String, View>)
+        fun onListFragmentInteraction(item: Ticker, sharedViews: Map<String, View>)
     }
 }

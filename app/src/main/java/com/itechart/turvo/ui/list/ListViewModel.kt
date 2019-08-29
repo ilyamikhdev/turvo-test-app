@@ -24,7 +24,7 @@ class ListViewModel(private val tickers: String) : ViewModel() {
     }
 
     private suspend fun generateData() = withContext(Dispatchers.IO) {
-        DummyContent(tickers, 10).items.map {
+        DummyContent(tickers, 10).tickersList.map {
             ListItemTicker(
                 item = it,
                 id = it.id,

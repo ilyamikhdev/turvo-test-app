@@ -8,17 +8,16 @@ import androidx.lifecycle.viewModelScope
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
-import com.itechart.turvo.repository.DummyContent
+import com.itechart.turvo.entity.Ticker
 import com.itechart.turvo.ui.list.ListItemTicker
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlin.math.sign
 
-class DetailsViewModel(item: DummyContent.DummyItem) : ViewModel() {
+class DetailsViewModel(item: Ticker) : ViewModel() {
     private val _form = MutableLiveData<ListItemTicker>()
     val formState: LiveData<ListItemTicker> = _form
-
 
     init {
         viewModelScope.launch {
@@ -85,13 +84,15 @@ class DetailsViewModel(item: DummyContent.DummyItem) : ViewModel() {
             }
         }
 
-        val set3 =
-            LineDataSet(values.subList(indexFirst, indexSecond + 1), "Biggest jump").apply {
-                color = Color.RED
-                lineWidth = 1f
-                setDrawCircles(false)
-                setDrawValues(false)
-            }
+        val set3 = LineDataSet(
+            values.subList(indexFirst, indexSecond + 1),
+            "Biggest jump"
+        ).apply {
+            color = Color.RED
+            lineWidth = 1f
+            setDrawCircles(false)
+            setDrawValues(false)
+        }
 
         dataSets.add(set3)
 

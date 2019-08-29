@@ -10,7 +10,7 @@ import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.itechart.turvo.R
-import com.itechart.turvo.repository.DummyContent.DummyItem
+import com.itechart.turvo.entity.Ticker
 import com.itechart.turvo.ui.list.ListFragment.OnListFragmentInteractionListener
 import kotlinx.android.synthetic.main.item_ticker.view.*
 
@@ -79,7 +79,7 @@ class TickerRecyclerViewAdapter(
 }
 
 data class ListItemTicker(
-    val item: DummyItem,
+    val item: Ticker,
     val id: Int,
     val title: String,
     val price: String,

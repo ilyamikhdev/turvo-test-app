@@ -1,7 +1,6 @@
 package com.itechart.turvo.repository
 
-import android.os.Parcelable
-import kotlinx.android.parcel.Parcelize
+import com.itechart.turvo.entity.Ticker
 import java.math.RoundingMode
 import java.util.*
 import kotlin.random.Random
@@ -13,7 +12,7 @@ import kotlin.random.Random
  * TODO: Replace all uses of this class before publishing your app.
  */
 class DummyContent(tickers: String?, private var countDays: Int = 10) {
-    val items: MutableList<DummyItem> = ArrayList()
+    val tickersList: MutableList<Ticker> = ArrayList()
 
     init {
         tickers
@@ -22,11 +21,11 @@ class DummyContent(tickers: String?, private var countDays: Int = 10) {
             .map { it.trim() }
             .filterNot { it.isEmpty() }
             .forEachIndexed { index, element ->
-                items.add(createDummyItem(index, element))
+                tickersList.add(createDummyItem(index, element))
             }
     }
 
-    private fun createDummyItem(position: Int, ticker: String) = DummyItem(
+    private fun createDummyItem(position: Int, ticker: String) = Ticker(
         id = position,
         ticker = ticker,
         prices = makePriceList()
@@ -49,14 +48,4 @@ class DummyContent(tickers: String?, private var countDays: Int = 10) {
         .toBigDecimal()
         .setScale(2, RoundingMode.UP)
         .toDouble()
-
-    /**
-     * A dummy item representing a piece of ticker.
-     */
-    @Parcelize
-    data class DummyItem(
-        val id: Int,
-        val ticker: String,
-        val prices: List<Double>
-    ) : Parcelable
 }

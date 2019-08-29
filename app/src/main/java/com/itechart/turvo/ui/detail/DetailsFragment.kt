@@ -10,8 +10,8 @@ import androidx.lifecycle.Observer
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.data.LineData
 import com.itechart.turvo.R
+import com.itechart.turvo.entity.Ticker
 import com.itechart.turvo.helper.show
-import com.itechart.turvo.repository.DummyContent
 import com.itechart.turvo.ui.BaseFragment
 import kotlinx.android.synthetic.main.fragment_details.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -20,7 +20,7 @@ import org.koin.core.parameter.parametersOf
 
 class DetailsFragment : BaseFragment() {
 
-    private var argItem: DummyContent.DummyItem? = null
+    private var argItem: Ticker? = null
 
     companion object {
         const val ARG_TICKER_ITEM = "ticker_item"
@@ -28,7 +28,7 @@ class DetailsFragment : BaseFragment() {
         const val ARG_TICKER_TRANS_PRICE = "price_name"
         const val ARG_TICKER_TRANS_CHART = "chart_name"
 
-        fun newInstance(item: DummyContent.DummyItem?) = DetailsFragment().apply {
+        fun newInstance(item: Ticker?) = DetailsFragment().apply {
             arguments = Bundle().apply {
                 putParcelable(ARG_TICKER_ITEM, item)
                 putString(ARG_TICKER_TRANS_TICKER, "item_ticker ${item?.id}")
