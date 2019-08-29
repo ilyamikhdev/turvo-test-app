@@ -4,18 +4,27 @@ import android.graphics.Color
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
-import com.itechart.turvo.ui.list.dummy.DummyContent
+import com.itechart.turvo.repository.DummyContent
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
-class ListViewModel(tickers: String) : ViewModel() {
+class ListViewModel(private val tickers: String) : ViewModel() {
     private val _form = MutableLiveData<List<ListItemTicker>>()
     val formState: LiveData<List<ListItemTicker>> = _form
 
-
     init {
-        _form.value = DummyContent(tickers).items.map {
+        viewModelScope.launch {
+            _form.value = generateData()
+        }
+    }
+
+    private suspend fun generateData() = withContext(Dispatchers.IO) {
+        DummyContent(tickers, 10).items.map {
             ListItemTicker(
                 item = it,
                 id = it.id,

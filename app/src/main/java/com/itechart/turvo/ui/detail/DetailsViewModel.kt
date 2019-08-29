@@ -4,11 +4,15 @@ import android.graphics.Color
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
+import com.itechart.turvo.repository.DummyContent
 import com.itechart.turvo.ui.list.ListItemTicker
-import com.itechart.turvo.ui.list.dummy.DummyContent
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlin.math.sign
 
 class DetailsViewModel(item: DummyContent.DummyItem) : ViewModel() {
@@ -17,17 +21,18 @@ class DetailsViewModel(item: DummyContent.DummyItem) : ViewModel() {
 
 
     init {
-        _form.value = ListItemTicker(
-            item = item,
-            id = item.id,
-            title = item.ticker,
-            price = item.prices.lastOrNull()?.toString() ?: "",
-            dataSets = getChartDataSets(item.prices)
-        )
-
+        viewModelScope.launch {
+            _form.value = ListItemTicker(
+                item = item,
+                id = item.id,
+                title = item.ticker,
+                price = item.prices.lastOrNull()?.toString() ?: "",
+                dataSets = getChartDataSets(item.prices)
+            )
+        }
     }
 
-    private fun getChartDataSets(prices: List<Double>): ArrayList<ILineDataSet> {
+    private suspend fun getChartDataSets(prices: List<Double>) = withContext(Dispatchers.IO) {
         val values = prices.mapIndexed { index, value ->
             Entry(index.toFloat(), value.toFloat())
         }
@@ -45,7 +50,10 @@ class DetailsViewModel(item: DummyContent.DummyItem) : ViewModel() {
 
         if (values.isNotEmpty()) {
             val set2 =
-                LineDataSet(values.subList(values.size - 1, values.size), "Current price").apply {
+                LineDataSet(
+                    values.subList(values.size - 1, values.size),
+                    "Current price"
+                ).apply {
                     color = Color.BLACK
                     setCircleColor(Color.BLACK)
                     circleRadius = 3f
@@ -77,15 +85,16 @@ class DetailsViewModel(item: DummyContent.DummyItem) : ViewModel() {
             }
         }
 
-        val set3 = LineDataSet(values.subList(indexFirst, indexSecond + 1), "Biggest jump").apply {
-            color = Color.RED
-            lineWidth = 1f
-            setDrawCircles(false)
-            setDrawValues(false)
-        }
+        val set3 =
+            LineDataSet(values.subList(indexFirst, indexSecond + 1), "Biggest jump").apply {
+                color = Color.RED
+                lineWidth = 1f
+                setDrawCircles(false)
+                setDrawValues(false)
+            }
 
         dataSets.add(set3)
 
-        return dataSets
+        dataSets
     }
 }

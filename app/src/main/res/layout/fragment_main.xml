@@ -27,7 +27,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:imeOptions="actionDone"
-            android:inputType="textCapCharacters"
+            android:inputType="textCapCharacters|textNoSuggestions"
             android:textColor="@android:color/black"
             android:textSize="17sp" />
 

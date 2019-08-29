@@ -11,9 +11,9 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.transition.Fade
 import com.itechart.turvo.R
 import com.itechart.turvo.helper.*
+import com.itechart.turvo.repository.DummyContent.DummyItem
 import com.itechart.turvo.ui.BaseFragment
 import com.itechart.turvo.ui.detail.DetailsFragment
-import com.itechart.turvo.ui.list.dummy.DummyContent.DummyItem
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
@@ -49,6 +49,7 @@ class ListFragment : BaseFragment() {
                 item: DummyItem,
                 sharedViews: Map<String, View>
             ) {
+
                 getBaseActivity()?.changeTo(
                     fragment = DetailsFragment.newInstance(item).addSharedElementTransition(
                         DefaultTransition(),

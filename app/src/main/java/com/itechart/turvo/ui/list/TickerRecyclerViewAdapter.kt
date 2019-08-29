@@ -10,8 +10,8 @@ import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.itechart.turvo.R
+import com.itechart.turvo.repository.DummyContent.DummyItem
 import com.itechart.turvo.ui.list.ListFragment.OnListFragmentInteractionListener
-import com.itechart.turvo.ui.list.dummy.DummyContent.DummyItem
 import kotlinx.android.synthetic.main.item_ticker.view.*
 
 class TickerRecyclerViewAdapter(

@@ -6,12 +6,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import com.itechart.turvo.R
-import com.itechart.turvo.helper.afterTextChanged
 import com.itechart.turvo.helper.hide
 import com.itechart.turvo.ui.BaseFragment
-import kotlinx.android.synthetic.main.main_fragment.*
+import com.jakewharton.rxbinding3.view.clicks
+import com.jakewharton.rxbinding3.widget.editorActionEvents
+import com.jakewharton.rxbinding3.widget.textChanges
+import io.reactivex.Observable
+import io.reactivex.disposables.CompositeDisposable
+import kotlinx.android.synthetic.main.fragment_main.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainFragment : BaseFragment() {
 
@@ -19,55 +23,45 @@ class MainFragment : BaseFragment() {
         fun newInstance() = MainFragment()
     }
 
-    private lateinit var viewModel: MainViewModel
+    private val viewModel: MainViewModel by viewModel()
+    private val compositeDisposable = CompositeDisposable()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.main_fragment, container, false)
+        return inflater.inflate(R.layout.fragment_main, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         getBaseActivity()?.getToolbar()?.hide()
 
-        viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
+        val disposableTextChanges = et_ticker.textChanges()
+            .skipInitialValue()
+            .filter { it.isNotEmpty() }
+            .doOnNext { showError(null) }
+            .subscribe { viewModel.validateData(it.toString()) }
+
+        val disposableClicks = Observable.merge(
+            et_ticker.editorActionEvents()
+                .filter { it.actionId == EditorInfo.IME_ACTION_DONE }
+                .map { Unit },
+            btn_next.clicks()
+        )
+            .doOnNext { getBaseActivity()?.hideKeyboard() }
+            .subscribe { viewModel.onNext(et_ticker.text.toString()) }
+
+        compositeDisposable.addAll(disposableTextChanges, disposableClicks)
 
         viewModel.formState.observe(this, Observer { state ->
             btn_next.isEnabled = state.isDataValid
             showError(state.tickerError)
         })
 
-        et_ticker.apply {
-            afterTextChanged {
-                showError(null)
-                viewModel.validateData(it, showError = true)
-            }
-
-            setOnFocusChangeListener { _, hasFocus ->
-                val text = et_ticker.text.toString()
-                if (!hasFocus && text.isNotEmpty()) {
-                    viewModel.validateData(text)
-                } else {
-                    showError(null)
-                }
-            }
-
-            setOnEditorActionListener { _, actionId, _ ->
-                when (actionId) {
-                    EditorInfo.IME_ACTION_DONE -> onNext()
-                }
-                false
-            }
-        }
-
         viewModel.onNextResult.observe(this, Observer { event ->
             event.getContentIfNotHandled()?.let { getBaseActivity()?.navigateToList(it) }
         })
-
-        btn_next.setOnClickListener { onNext() }
-
     }
 
     private fun showError(error: Int?) {
@@ -77,9 +71,8 @@ class MainFragment : BaseFragment() {
         }
     }
 
-    private fun onNext() {
-        viewModel.onNext(et_ticker.text.toString())
+    override fun onDestroy() {
+        super.onDestroy()
+        compositeDisposable.dispose()
     }
-
-
 }

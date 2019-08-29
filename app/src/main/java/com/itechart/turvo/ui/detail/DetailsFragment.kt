@@ -11,8 +11,8 @@ import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.data.LineData
 import com.itechart.turvo.R
 import com.itechart.turvo.helper.show
+import com.itechart.turvo.repository.DummyContent
 import com.itechart.turvo.ui.BaseFragment
-import com.itechart.turvo.ui.list.dummy.DummyContent
 import kotlinx.android.synthetic.main.fragment_details.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf

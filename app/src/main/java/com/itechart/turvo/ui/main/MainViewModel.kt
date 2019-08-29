@@ -19,13 +19,13 @@ class MainViewModel : ViewModel() {
         }
     }
 
-    fun validateData(tickers: String, showError: Boolean = true): Boolean {
+    fun validateData(tickers: String): Boolean {
         var state = when {
             tickers.isEmpty() -> {
-                MainFormState(if (showError) R.string.main_error_empty else null)
+                MainFormState(R.string.main_error_empty, isDataValid = false)
             }
             tickers.split(",").map { it.trim() }.filterNot { it.isEmpty() }.size > 5 -> {
-                MainFormState(if (showError) R.string.main_error_limit else null)
+                MainFormState(R.string.main_error_limit, isDataValid = false)
             }
             else -> MainFormState(isDataValid = true)
         }

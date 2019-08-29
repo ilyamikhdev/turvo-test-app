@@ -1,4 +1,4 @@
-package com.itechart.turvo.ui.list.dummy
+package com.itechart.turvo.repository
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
@@ -12,7 +12,7 @@ import kotlin.random.Random
  *
  * TODO: Replace all uses of this class before publishing your app.
  */
-class DummyContent(tickers: String?) {
+class DummyContent(tickers: String?, private var countDays: Int = 10) {
     val items: MutableList<DummyItem> = ArrayList()
 
     init {
@@ -34,7 +34,12 @@ class DummyContent(tickers: String?) {
 
     private fun makePriceList(): List<Double> {
         val priceList = mutableListOf<Double>()
-        repeat((0..9).count()) {
+
+        if (countDays == 0) {
+            countDays = 1
+        }
+
+        repeat((1..countDays).count()) {
             priceList.add(getRandomPrice())
         }
         return priceList

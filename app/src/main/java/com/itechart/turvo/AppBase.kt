@@ -1,6 +1,7 @@
 package com.itechart.turvo
 
 import android.app.Application
+import com.github.mikephil.charting.utils.Utils
 import com.itechart.turvo.di.appModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -15,6 +16,7 @@ open class AppBase : Application() {
             androidContext(this@AppBase)
             modules(listOf(appModule))
         }
+        Utils.init(this)
     }
 
 }
