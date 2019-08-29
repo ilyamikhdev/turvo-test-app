@@ -5,10 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.data.LineData
 import com.itechart.turvo.R
+import com.itechart.turvo.helper.show
 import com.itechart.turvo.ui.BaseFragment
 import com.itechart.turvo.ui.list.dummy.DummyContent
 import kotlinx.android.synthetic.main.fragment_details.*
@@ -55,9 +57,14 @@ class DetailsFragment : BaseFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        getBaseActivity()?.supportActionBar?.title = getString(R.string.ticker_details_title)
-        getBaseActivity()?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        getBaseActivity()?.supportActionBar?.show()
+        val colorWhite = ContextCompat.getColor(context!!, android.R.color.white)
+        getBaseActivity()?.getToolbar()?.show()
+        getBaseActivity()?.getToolbar()?.apply {
+            title = null
+            navigationIcon?.setTint(colorWhite)
+            background?.setTint(colorWhite)
+        }
+        getBaseActivity()?.supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_cancel)
 
         chart_details.axisLeft.isEnabled = false
         chart_details.axisLeft.spaceTop = 40f

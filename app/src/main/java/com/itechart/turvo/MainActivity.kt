@@ -6,12 +6,16 @@ import com.itechart.turvo.helper.Transaction
 import com.itechart.turvo.helper.changeTo
 import com.itechart.turvo.ui.list.ListFragment
 import com.itechart.turvo.ui.main.MainFragment
+import kotlinx.android.synthetic.main.main_activity.*
 
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
+        setSupportActionBar(getToolbar())
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
         if (savedInstanceState == null) {
             changeTo(MainFragment.newInstance(), transaction = Transaction.SLIDE_END_WITHOUT_BACK)
         }
@@ -39,4 +43,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun getContentId() = R.id.container
+    fun getToolbar() = toolbar
+
 }

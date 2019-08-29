@@ -45,8 +45,8 @@
         android:id="@+id/tv_details_desc"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
         android:layout_marginTop="15dp"
+        android:layout_weight="1"
         android:text="@string/ticker_details_desc"
         android:textSize="18sp" />
 </LinearLayout>

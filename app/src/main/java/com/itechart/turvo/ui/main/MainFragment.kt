@@ -9,6 +9,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.itechart.turvo.R
 import com.itechart.turvo.helper.afterTextChanged
+import com.itechart.turvo.helper.hide
 import com.itechart.turvo.ui.BaseFragment
 import kotlinx.android.synthetic.main.main_fragment.*
 
@@ -29,7 +30,7 @@ class MainFragment : BaseFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        getBaseActivity()?.supportActionBar?.hide()
+        getBaseActivity()?.getToolbar()?.hide()
 
         viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
 
