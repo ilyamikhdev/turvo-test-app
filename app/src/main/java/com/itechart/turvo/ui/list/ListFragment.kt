@@ -42,7 +42,7 @@ class ListFragment : BaseFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_ticker_list, container, false)
+        val view = inflater.inflate(R.layout.fragment_list, container, false)
 
         val onItemClick = object : OnListFragmentInteractionListener {
             override fun onListFragmentInteraction(
