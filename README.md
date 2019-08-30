@@ -11,4 +11,4 @@ So in case if you faced some empty graph data, you can switch to Dummy data in G
 
 Unfortunately, API allows getting only one ticker data per request, so App call API for every ticker in the list(limit tickers 5 by task)
 
-[Demo video](https://github.com/ilyamikhdev/turvo-test-app/blob/master/demo-video-2019-08-29-101217.mp4)
+[Demo video](https://github.com/ilyamikhdev/turvo-test-app/blob/master/demo-video.mp4)
