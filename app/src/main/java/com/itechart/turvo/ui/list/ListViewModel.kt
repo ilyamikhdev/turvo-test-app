@@ -55,6 +55,6 @@ class ListViewModel(private val tickers: String, private val repository: Reposit
             setDrawValues(false)
         }
 
-        return LineData(mutableListOf<ILineDataSet>(set1, set2))
+        return LineData(listOf<ILineDataSet>(set1, set2))
     }
 }

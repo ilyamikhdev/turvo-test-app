@@ -80,7 +80,7 @@ class DetailsViewModel(item: Ticker) : ViewModel() {
                 setDrawValues(false)
             }
 
-            result = LineData(mutableListOf<ILineDataSet>(set1, set2, set3))
+            result = LineData(listOf<ILineDataSet>(set1, set2, set3))
         }
 
         result

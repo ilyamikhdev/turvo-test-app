@@ -7,12 +7,11 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.transition.Fade
 import com.itechart.turvo.R
 import com.itechart.turvo.entity.Ticker
-import com.itechart.turvo.helper.*
+import com.itechart.turvo.helper.hide
+import com.itechart.turvo.helper.show
 import com.itechart.turvo.ui.BaseFragment
-import com.itechart.turvo.ui.details.DetailsFragment
 import kotlinx.android.synthetic.main.fragment_list.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -67,6 +66,7 @@ class ListFragment : BaseFragment() {
     private fun initToolbar() {
         val colorWhite = ContextCompat.getColor(context!!, android.R.color.white)
         val colorPrimary = ContextCompat.getColor(context!!, R.color.colorPrimary)
+        getBaseActivity()?.supportActionBar?.setHomeAsUpIndicator(null)
         getBaseActivity()?.getToolbar()?.show()
         getBaseActivity()?.getToolbar()?.apply {
             title = getString(R.string.title_list_tickers)
@@ -74,20 +74,11 @@ class ListFragment : BaseFragment() {
             navigationIcon?.setTint(colorWhite)
             background?.setTint(colorPrimary)
         }
-        getBaseActivity()?.supportActionBar?.setHomeAsUpIndicator(null)
     }
 
     private val onItemClick = object : OnListFragmentInteractionListener {
         override fun onListFragmentInteraction(item: Ticker, sharedViews: Map<String, View>) {
-            val fragment = DetailsFragment.newInstance(item).addSharedElementTransition(
-                DefaultTransition(), Fade(), this@ListFragment
-            )
-            getBaseActivity()?.changeTo(
-                fragment = fragment,
-                withBack = true,
-                transaction = Transaction.NONE,
-                sharedViews = sharedViews
-            )
+            getBaseActivity()?.navigateToDetails(item, sharedViews, this@ListFragment)
         }
     }
 

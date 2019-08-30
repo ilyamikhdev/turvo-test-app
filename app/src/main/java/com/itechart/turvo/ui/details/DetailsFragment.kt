@@ -73,12 +73,13 @@ class DetailsFragment : BaseFragment() {
 
     private fun initToolbar() {
         val colorWhite = ContextCompat.getColor(context!!, android.R.color.white)
+        val colorBlack = ContextCompat.getColor(context!!, android.R.color.black)
+        getBaseActivity()?.supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_cancel)
         getBaseActivity()?.getToolbar()?.show()
         getBaseActivity()?.getToolbar()?.apply {
             title = null
-            navigationIcon?.setTint(colorWhite)
+            navigationIcon?.setTint(colorBlack)
             background?.setTint(colorWhite)
         }
-        getBaseActivity()?.supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_cancel)
     }
 }

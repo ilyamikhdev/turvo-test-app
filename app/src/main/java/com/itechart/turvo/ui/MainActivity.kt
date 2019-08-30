@@ -2,12 +2,19 @@ package com.itechart.turvo.ui
 
 import android.content.Context
 import android.os.Bundle
+import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.fragment.app.Fragment
+import androidx.transition.Fade
 import com.itechart.turvo.R
+import com.itechart.turvo.entity.Ticker
+import com.itechart.turvo.helper.DefaultTransition
 import com.itechart.turvo.helper.Transaction
+import com.itechart.turvo.helper.addSharedElementTransition
 import com.itechart.turvo.helper.changeTo
+import com.itechart.turvo.ui.details.DetailsFragment
 import com.itechart.turvo.ui.list.ListFragment
 import com.itechart.turvo.ui.main.MainFragment
 import kotlinx.android.synthetic.main.activity_main.*
@@ -33,14 +40,6 @@ class MainActivity : AppCompatActivity() {
         return true
     }
 
-    override fun onBackPressed() {
-        if (supportFragmentManager.backStackEntryCount == 1) {
-            changeTo(MainFragment.newInstance(), transaction = Transaction.SLIDE_UP)
-        } else {
-            super.onBackPressed()
-        }
-    }
-
     fun navigateToList(data: String) {
         changeTo(
             ListFragment.newInstance(data),
@@ -48,6 +47,19 @@ class MainActivity : AppCompatActivity() {
             withBack = true
         )
     }
+
+    fun navigateToDetails(data: Ticker, sharedViews: Map<String, View>, fromFragment: Fragment) {
+        val fragment = DetailsFragment.newInstance(data).addSharedElementTransition(
+            DefaultTransition(), Fade(), fromFragment
+        )
+        changeTo(
+            fragment = fragment,
+            withBack = true,
+            transaction = Transaction.NONE,
+            sharedViews = sharedViews
+        )
+    }
+
 
     fun hideKeyboard() {
         this.currentFocus?.let { v ->
