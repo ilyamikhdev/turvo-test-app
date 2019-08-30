@@ -1,6 +1,7 @@
 package com.itechart.turvo.helper
 
 import android.view.View
+import androidx.core.content.ContextCompat
 import com.github.mikephil.charting.charts.LineChart
 
 /**
@@ -30,4 +31,6 @@ fun LineChart.initUI() {
     description.isEnabled = false
     legend.isEnabled = false
     setTouchEnabled(false)
+    setNoDataText("No data")
+    setNoDataTextColor(ContextCompat.getColor(context, android.R.color.darker_gray))
 }

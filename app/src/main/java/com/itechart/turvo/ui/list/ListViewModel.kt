@@ -9,6 +9,7 @@ import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
+import com.itechart.turvo.entity.convertToListItem
 import com.itechart.turvo.repository.Repository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -25,23 +26,18 @@ class ListViewModel(private val tickers: String, private val repository: Reposit
     }
 
     private suspend fun loadData() = withContext(Dispatchers.IO) {
-        repository.getData(tickers).map {
-            ListItemTicker(
-                item = it,
-                id = it.id,
-                title = it.name,
-                price = it.prices.lastOrNull()?.toString() ?: "",
-                dataLines = getChartDataSets(it.prices)
-            )
-        }
+        repository.getData(tickers)
+            .map { it.convertToListItem(getChartDataSets(it.prices)) }
     }
 
-    private fun getChartDataSets(prices: List<Double>): LineData {
+    private fun getChartDataSets(prices: List<Double>): LineData? {
+        if (prices.isEmpty()) {
+            return null
+        }
+
         val values = prices.mapIndexed { index, value ->
             Entry(index.toFloat(), value.toFloat())
         }
-
-        val dataSets = ArrayList<ILineDataSet>()
 
         val set1 = LineDataSet(values, null).apply {
             color = Color.BLACK
@@ -50,19 +46,15 @@ class ListViewModel(private val tickers: String, private val repository: Reposit
             setDrawCircles(false)
             setDrawValues(false)
         }
-        dataSets.add(set1)
 
-        if (values.isNotEmpty()) {
-            val set2 = LineDataSet(values.subList(values.size - 1, values.size), null).apply {
-                setCircleColor(Color.BLACK)
-                circleRadius = 3f
-                setDrawCircleHole(false)
-                setDrawCircles(true)
-                setDrawValues(false)
-            }
-            dataSets.add(set2)
+        val set2 = LineDataSet(values.subList(values.size - 1, values.size), null).apply {
+            setCircleColor(Color.BLACK)
+            circleRadius = 3f
+            setDrawCircleHole(false)
+            setDrawCircles(true)
+            setDrawValues(false)
         }
 
-        return LineData(dataSets)
+        return LineData(mutableListOf<ILineDataSet>(set1, set2))
     }
 }

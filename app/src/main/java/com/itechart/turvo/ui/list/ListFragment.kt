@@ -21,7 +21,6 @@ import org.koin.core.parameter.parametersOf
 class ListFragment : BaseFragment() {
     private var argTickers: String? = null
     private val viewModel: ListViewModel by viewModel { parametersOf(argTickers) }
-
     private lateinit var adapter: ListRvAdapter
 
     companion object {

@@ -10,6 +10,7 @@ import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.itechart.turvo.entity.Ticker
+import com.itechart.turvo.entity.convertToListItem
 import com.itechart.turvo.ui.list.ListItemTicker
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -22,81 +23,66 @@ class DetailsViewModel(item: Ticker) : ViewModel() {
 
     init {
         viewModelScope.launch {
-            _form.value = ListItemTicker(
-                item = item,
-                id = item.id,
-                title = item.name,
-                price = item.prices.lastOrNull()?.toString() ?: "",
-                dataLines = if (item.prices.isNullOrEmpty()) null else getChartDataSets(item.prices)
-            )
+            _form.value = item.convertToListItem(getChartDataSets(item.prices))
         }
     }
 
     private suspend fun getChartDataSets(prices: List<Double>) = withContext(Dispatchers.IO) {
-        val values = prices.mapIndexed { index, value ->
-            Entry(index.toFloat(), value.toFloat())
-        }
+        var result: LineData? = null
 
-        val dataSets = java.util.ArrayList<ILineDataSet>()
+        if (prices.isNotEmpty()) {
+            val values = prices.mapIndexed { index, value ->
+                Entry(index.toFloat(), value.toFloat())
+            }
 
-        val set1 = LineDataSet(values, "10-day Prices").apply {
-            color = Color.BLACK
-            lineWidth = 2f
-            setDrawCircles(false)
-            setDrawValues(false)
-            valueTextSize = 9f
-        }
-        dataSets.add(set1)
+            val set1 = LineDataSet(values, null).apply {
+                color = Color.BLACK
+                lineWidth = 2f
+                setDrawCircles(false)
+                setDrawValues(false)
+                valueTextSize = 9f
+            }
 
-        if (values.isNotEmpty()) {
-            val set2 =
-                LineDataSet(
-                    values.subList(values.size - 1, values.size),
-                    "Current price"
-                ).apply {
-                    color = Color.BLACK
-                    setCircleColor(Color.BLACK)
-                    circleRadius = 3f
-                    setDrawCircleHole(false)
-                    setDrawCircles(true)
-                    setDrawValues(false)
-                }
-            dataSets.add(set2)
-        }
+            val set2 = LineDataSet(values.subList(values.size - 1, values.size), null).apply {
+                color = Color.BLACK
+                setCircleColor(Color.BLACK)
+                circleRadius = 3f
+                setDrawCircleHole(false)
+                setDrawCircles(true)
+                setDrawValues(false)
+            }
 
-        var indexFirst = 0
-        var indexSecond = 0
-        var diffMax = 0.0
+            var indexFirst = 0
+            var indexSecond = 0
+            var diffMax = 0.0f
 
-        prices.forEachIndexed { index, first ->
-            if (index != prices.size - 1) {
-                val second = prices[index + 1]
+            values.forEachIndexed { index, first ->
+                if (index != values.size - 1) {
+                    val second = values[index + 1]
 
-                var diff = first - second
-                if (diff.sign == -1.0) {
-                    diff *= -1
-                }
+                    var diff = first.y - second.y
+                    if (diff.sign == -1.0f) {
+                        diff *= -1
+                    }
 
-                if (diff > diffMax) {
-                    diffMax = diff
-                    indexFirst = index
-                    indexSecond = index + 1
+                    if (diff > diffMax) {
+                        diffMax = diff
+                        indexFirst = index
+                        indexSecond = index + 1
+                    }
                 }
             }
+
+            val set3 = LineDataSet(values.subList(indexFirst, indexSecond + 1), null).apply {
+                color = Color.RED
+                lineWidth = 2f
+                setDrawCircles(false)
+                setDrawValues(false)
+            }
+
+            result = LineData(mutableListOf<ILineDataSet>(set1, set2, set3))
         }
 
-        val set3 = LineDataSet(
-            values.subList(indexFirst, indexSecond + 1),
-            "Biggest jump"
-        ).apply {
-            color = Color.RED
-            lineWidth = 2f
-            setDrawCircles(false)
-            setDrawValues(false)
-        }
-
-        dataSets.add(set3)
-
-        LineData(dataSets)
+        result
     }
 }
