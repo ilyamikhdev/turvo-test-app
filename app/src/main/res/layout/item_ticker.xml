@@ -49,7 +49,9 @@
     </LinearLayout>
 
     <View
+        android:id="@+id/item_line"
         android:layout_width="match_parent"
         android:layout_height="1dp"
+        android:transitionName="item_line"
         android:background="@android:color/darker_gray" />
 </LinearLayout>

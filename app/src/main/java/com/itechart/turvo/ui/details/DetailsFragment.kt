@@ -28,6 +28,7 @@ class DetailsFragment : BaseFragment() {
         const val ARG_TICKER_TRANS_TICKER = "ticker_name"
         const val ARG_TICKER_TRANS_PRICE = "price_name"
         const val ARG_TICKER_TRANS_CHART = "chart_name"
+        const val ARG_TICKER_TRANS_LINE = "line_name"
 
         fun newInstance(item: Ticker?) = DetailsFragment().apply {
             arguments = Bundle().apply {
@@ -35,6 +36,7 @@ class DetailsFragment : BaseFragment() {
                 putString(ARG_TICKER_TRANS_TICKER, "$ARG_TICKER_TRANS_TICKER ${item?.id}")
                 putString(ARG_TICKER_TRANS_PRICE, "$ARG_TICKER_TRANS_PRICE ${item?.id}")
                 putString(ARG_TICKER_TRANS_CHART, "$ARG_TICKER_TRANS_CHART ${item?.id}")
+                putString(ARG_TICKER_TRANS_LINE, "$ARG_TICKER_TRANS_LINE ${item?.id}")
             }
         }
     }
@@ -51,6 +53,8 @@ class DetailsFragment : BaseFragment() {
                 arguments?.getString(ARG_TICKER_TRANS_PRICE)
             findViewById<LineChart>(R.id.chart_details).transitionName =
                 arguments?.getString(ARG_TICKER_TRANS_CHART)
+            findViewById<View>(R.id.chart_line).transitionName =
+                arguments?.getString(ARG_TICKER_TRANS_LINE)
         }
     }
 

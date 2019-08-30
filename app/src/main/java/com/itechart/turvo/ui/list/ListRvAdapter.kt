@@ -28,7 +28,8 @@ class ListRvAdapter(
             val sharedViews = mapOf(
                 v.item_ticker.transitionName to v.item_ticker,
                 v.item_price.transitionName to v.item_price,
-                v.item_chart.transitionName to v.item_chart
+                v.item_chart.transitionName to v.item_chart,
+                v.item_line.transitionName to v.item_line
             )
             listener?.onListFragmentInteraction(item, sharedViews)
         }
@@ -52,6 +53,7 @@ class ListRvAdapter(
         holder.ticker.transitionName = "${DetailsFragment.ARG_TICKER_TRANS_TICKER} ${item.id}"
         holder.price.transitionName = "${DetailsFragment.ARG_TICKER_TRANS_PRICE} ${item.id}"
         holder.chart.transitionName = "${DetailsFragment.ARG_TICKER_TRANS_CHART} ${item.id}"
+        holder.line.transitionName = "${DetailsFragment.ARG_TICKER_TRANS_LINE} ${item.id}"
 
         with(holder.view) {
             tag = item
@@ -62,10 +64,11 @@ class ListRvAdapter(
     override fun getItemCount(): Int = values.size
     override fun getItemId(position: Int): Long = values[position].id.toLong()
 
-    inner class ViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
+    class ViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
         val ticker: TextView = view.item_ticker
         val price: TextView = view.item_price
         val chart: LineChart = view.item_chart
+        val line: View = view.item_line
     }
 }
 
