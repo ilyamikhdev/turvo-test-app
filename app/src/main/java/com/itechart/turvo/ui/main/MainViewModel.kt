@@ -20,7 +20,7 @@ class MainViewModel : ViewModel() {
     }
 
     fun validateData(tickers: String): Boolean {
-        var state = when {
+        val state = when {
             tickers.isEmpty() -> {
                 MainFormState(R.string.main_error_empty, isDataValid = false)
             }

@@ -1,4 +1,4 @@
-package com.itechart.turvo.ui.detail
+package com.itechart.turvo.ui.details
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,9 +8,9 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import com.github.mikephil.charting.charts.LineChart
-import com.github.mikephil.charting.data.LineData
 import com.itechart.turvo.R
 import com.itechart.turvo.entity.Ticker
+import com.itechart.turvo.helper.initUI
 import com.itechart.turvo.helper.show
 import com.itechart.turvo.ui.BaseFragment
 import kotlinx.android.synthetic.main.fragment_details.*
@@ -21,6 +21,7 @@ import org.koin.core.parameter.parametersOf
 class DetailsFragment : BaseFragment() {
 
     private var argItem: Ticker? = null
+    private val viewModel: DetailsViewModel by viewModel { parametersOf(argItem) }
 
     companion object {
         const val ARG_TICKER_ITEM = "ticker_item"
@@ -31,14 +32,12 @@ class DetailsFragment : BaseFragment() {
         fun newInstance(item: Ticker?) = DetailsFragment().apply {
             arguments = Bundle().apply {
                 putParcelable(ARG_TICKER_ITEM, item)
-                putString(ARG_TICKER_TRANS_TICKER, "item_ticker ${item?.id}")
-                putString(ARG_TICKER_TRANS_PRICE, "item_price ${item?.id}")
-                putString(ARG_TICKER_TRANS_CHART, "item_chart ${item?.id}")
+                putString(ARG_TICKER_TRANS_TICKER, "$ARG_TICKER_TRANS_TICKER ${item?.id}")
+                putString(ARG_TICKER_TRANS_PRICE, "$ARG_TICKER_TRANS_PRICE ${item?.id}")
+                putString(ARG_TICKER_TRANS_CHART, "$ARG_TICKER_TRANS_CHART ${item?.id}")
             }
         }
     }
-
-    private val viewModel: DetailsViewModel by viewModel { parametersOf(argItem) }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -57,6 +56,18 @@ class DetailsFragment : BaseFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
+        initToolbar()
+        chart_details.initUI()
+
+        viewModel.formState.observe(this, Observer {
+            tv_details_ticker.text = it.title
+            tv_details_price.text = it.price
+            chart_details.data = it.dataLines
+        })
+    }
+
+    private fun initToolbar() {
         val colorWhite = ContextCompat.getColor(context!!, android.R.color.white)
         getBaseActivity()?.getToolbar()?.show()
         getBaseActivity()?.getToolbar()?.apply {
@@ -65,21 +76,5 @@ class DetailsFragment : BaseFragment() {
             background?.setTint(colorWhite)
         }
         getBaseActivity()?.supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_cancel)
-
-        chart_details.axisLeft.isEnabled = false
-        chart_details.axisLeft.spaceTop = 40f
-        chart_details.axisLeft.spaceBottom = 40f
-        chart_details.axisRight.isEnabled = false
-        chart_details.xAxis.isEnabled = false
-        chart_details.description.isEnabled = false
-        chart_details.legend.isEnabled = false
-        chart_details.setTouchEnabled(false)
-
-        viewModel.formState.observe(this, Observer {
-            tv_details_ticker.text = it.title
-            tv_details_price.text = it.price
-            chart_details.data = LineData(it.dataSets)
-        })
-
     }
 }

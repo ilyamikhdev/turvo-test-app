@@ -37,25 +37,25 @@ class MainFragment : BaseFragment() {
         super.onActivityCreated(savedInstanceState)
         getBaseActivity()?.getToolbar()?.hide()
 
-        val disposableTextChanges = et_ticker.textChanges()
+        val disposableTextChanges = et_main_ticker.textChanges()
             .skipInitialValue()
             .filter { it.isNotEmpty() }
             .doOnNext { showError(null) }
             .subscribe { viewModel.validateData(it.toString()) }
 
         val disposableClicks = Observable.merge(
-            et_ticker.editorActionEvents()
+            et_main_ticker.editorActionEvents()
                 .filter { it.actionId == EditorInfo.IME_ACTION_DONE }
                 .map { Unit },
-            btn_next.clicks()
+            btn_main_next.clicks()
         )
             .doOnNext { getBaseActivity()?.hideKeyboard() }
-            .subscribe { viewModel.onNext(et_ticker.text.toString()) }
+            .subscribe { viewModel.onNext(et_main_ticker.text.toString()) }
 
         compositeDisposable.addAll(disposableTextChanges, disposableClicks)
 
         viewModel.formState.observe(this, Observer { state ->
-            btn_next.isEnabled = state.isDataValid
+            btn_main_next.isEnabled = state.isDataValid
             showError(state.tickerError)
         })
 
@@ -65,9 +65,9 @@ class MainFragment : BaseFragment() {
     }
 
     private fun showError(error: Int?) {
-        til_ticker.isErrorEnabled = error != null
+        til_main_ticker.isErrorEnabled = error != null
         error?.let {
-            til_ticker.error = getString(it)
+            til_main_ticker.error = getString(it)
         }
     }
 

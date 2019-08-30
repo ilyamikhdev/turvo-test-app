@@ -6,9 +6,9 @@ import androidx.transition.ChangeBounds
 import androidx.transition.ChangeImageTransform
 import androidx.transition.ChangeTransform
 import androidx.transition.TransitionSet
-import com.itechart.turvo.MainActivity
 import com.itechart.turvo.R
 import com.itechart.turvo.ui.BaseFragment
+import com.itechart.turvo.ui.MainActivity
 
 /**
  * @param sharedViews View in the first Fragment you want to “share” with the second Fragment. The transition name here is the transition name of the “shared” View in the second Fragment.

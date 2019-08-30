@@ -2,17 +2,14 @@ package com.itechart.turvo.repository
 
 import com.itechart.turvo.entity.Ticker
 import java.math.RoundingMode
-import java.util.*
 import kotlin.random.Random
 
 /**
  * Helper class for providing sample name for user interfaces created by
  * Android template wizards.
- *
- * TODO: Replace all uses of this class before publishing your app.
  */
 class DummyContent(tickers: List<String>, private var countDays: Int) {
-    val tickersList: MutableList<Ticker> = ArrayList()
+    val tickersList = mutableListOf<Ticker>()
 
     init {
         tickers.forEachIndexed { index, element ->

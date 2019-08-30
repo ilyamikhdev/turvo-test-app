@@ -1,10 +1,11 @@
-package com.itechart.turvo
+package com.itechart.turvo.ui
 
 import android.content.Context
 import android.os.Bundle
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import com.itechart.turvo.R
 import com.itechart.turvo.helper.Transaction
 import com.itechart.turvo.helper.changeTo
 import com.itechart.turvo.ui.list.ListFragment
@@ -51,7 +52,7 @@ class MainActivity : AppCompatActivity() {
     fun hideKeyboard() {
         this.currentFocus?.let { v ->
             val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
-            imm?.let { it.hideSoftInputFromWindow(v.windowToken, 0) }
+            imm?.hideSoftInputFromWindow(v.windowToken, 0)
         }
     }
 }

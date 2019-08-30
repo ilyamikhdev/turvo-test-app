@@ -12,7 +12,7 @@ import com.itechart.turvo.R
 import com.itechart.turvo.entity.Ticker
 import com.itechart.turvo.helper.*
 import com.itechart.turvo.ui.BaseFragment
-import com.itechart.turvo.ui.detail.DetailsFragment
+import com.itechart.turvo.ui.details.DetailsFragment
 import kotlinx.android.synthetic.main.fragment_list.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -47,18 +47,10 @@ class ListFragment : BaseFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        val colorWhite = ContextCompat.getColor(context!!, android.R.color.white)
-        val colorPrimary = ContextCompat.getColor(context!!, R.color.colorPrimary)
-        getBaseActivity()?.getToolbar()?.show()
-        getBaseActivity()?.getToolbar()?.apply {
-            title = getString(R.string.ticker_list_title)
-            setTitleTextColor(colorWhite)
-            navigationIcon?.setTint(colorWhite)
-            background?.setTint(colorPrimary)
-        }
-        getBaseActivity()?.supportActionBar?.setHomeAsUpIndicator(null)
+        initToolbar()
 
-        adapter = ListRvAdapter(emptyList(), onItemClick).apply { setHasStableIds(true) }
+        adapter = ListRvAdapter(listener = onItemClick).apply { setHasStableIds(true) }
+
         with(rv_list) {
             layoutManager = LinearLayoutManager(context)
             setHasFixedSize(true)
@@ -66,11 +58,24 @@ class ListFragment : BaseFragment() {
         }
 
         viewModel.formState.observe(this, Observer {
-            progress.hide()
+            progress_list.hide()
             adapter.values = it
             adapter.notifyDataSetChanged()
 
         })
+    }
+
+    private fun initToolbar() {
+        val colorWhite = ContextCompat.getColor(context!!, android.R.color.white)
+        val colorPrimary = ContextCompat.getColor(context!!, R.color.colorPrimary)
+        getBaseActivity()?.getToolbar()?.show()
+        getBaseActivity()?.getToolbar()?.apply {
+            title = getString(R.string.title_list_tickers)
+            setTitleTextColor(colorWhite)
+            navigationIcon?.setTint(colorWhite)
+            background?.setTint(colorPrimary)
+        }
+        getBaseActivity()?.supportActionBar?.setHomeAsUpIndicator(null)
     }
 
     private val onItemClick = object : OnListFragmentInteractionListener {

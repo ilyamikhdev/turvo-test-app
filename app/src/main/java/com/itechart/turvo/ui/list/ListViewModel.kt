@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.github.mikephil.charting.data.Entry
+import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.itechart.turvo.repository.Repository
@@ -30,12 +31,12 @@ class ListViewModel(private val tickers: String, private val repository: Reposit
                 id = it.id,
                 title = it.name,
                 price = it.prices.lastOrNull()?.toString() ?: "",
-                dataSets = getChartDataSets(it.prices)
+                dataLines = getChartDataSets(it.prices)
             )
         }
     }
 
-    private fun getChartDataSets(prices: List<Double>): ArrayList<ILineDataSet> {
+    private fun getChartDataSets(prices: List<Double>): LineData {
         val values = prices.mapIndexed { index, value ->
             Entry(index.toFloat(), value.toFloat())
         }
@@ -62,6 +63,6 @@ class ListViewModel(private val tickers: String, private val repository: Reposit
             dataSets.add(set2)
         }
 
-        return dataSets
+        return LineData(dataSets)
     }
 }

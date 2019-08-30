@@ -1,4 +1,4 @@
-package com.itechart.turvo.ui.detail
+package com.itechart.turvo.ui.details
 
 import android.graphics.Color
 import androidx.lifecycle.LiveData
@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.github.mikephil.charting.data.Entry
+import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.itechart.turvo.entity.Ticker
@@ -21,15 +22,12 @@ class DetailsViewModel(item: Ticker) : ViewModel() {
 
     init {
         viewModelScope.launch {
-            if (item.prices.isNullOrEmpty())
-                return@launch
-
             _form.value = ListItemTicker(
                 item = item,
                 id = item.id,
                 title = item.name,
                 price = item.prices.lastOrNull()?.toString() ?: "",
-                dataSets = getChartDataSets(item.prices)
+                dataLines = if (item.prices.isNullOrEmpty()) null else getChartDataSets(item.prices)
             )
         }
     }
@@ -92,13 +90,13 @@ class DetailsViewModel(item: Ticker) : ViewModel() {
             "Biggest jump"
         ).apply {
             color = Color.RED
-            lineWidth = 1f
+            lineWidth = 2f
             setDrawCircles(false)
             setDrawValues(false)
         }
 
         dataSets.add(set3)
 
-        dataSets
+        LineData(dataSets)
     }
 }

@@ -2,7 +2,6 @@ package com.itechart.turvo.ui
 
 import android.content.Context
 import androidx.fragment.app.Fragment
-import com.itechart.turvo.MainActivity
 
 abstract class BaseFragment : Fragment() {
     private var activity: MainActivity? = null

@@ -8,14 +8,15 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.data.LineData
-import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.itechart.turvo.R
 import com.itechart.turvo.entity.Ticker
+import com.itechart.turvo.helper.initUI
+import com.itechart.turvo.ui.details.DetailsFragment
 import com.itechart.turvo.ui.list.ListFragment.OnListFragmentInteractionListener
 import kotlinx.android.synthetic.main.item_ticker.view.*
 
 class ListRvAdapter(
-    var values: List<ListItemTicker>,
+    var values: List<ListItemTicker> = emptyList(),
     private val listener: OnListFragmentInteractionListener?
 ) : RecyclerView.Adapter<ListRvAdapter.ViewHolder>() {
 
@@ -42,13 +43,15 @@ class ListRvAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = values[position]
 
+        holder.chart.initUI()
+
+        holder.chart.data = item.dataLines
         holder.ticker.text = item.title
         holder.price.text = item.price
-        initChart(holder.chart, item.dataSets)
 
-        holder.ticker.transitionName = "item_ticker ${item.id}"
-        holder.price.transitionName = "item_price ${item.id}"
-        holder.chart.transitionName = "item_chart ${item.id}"
+        holder.ticker.transitionName = "${DetailsFragment.ARG_TICKER_TRANS_TICKER} ${item.id}"
+        holder.price.transitionName = "${DetailsFragment.ARG_TICKER_TRANS_PRICE} ${item.id}"
+        holder.chart.transitionName = "${DetailsFragment.ARG_TICKER_TRANS_CHART} ${item.id}"
 
         with(holder.view) {
             tag = item
@@ -64,18 +67,6 @@ class ListRvAdapter(
         val price: TextView = view.item_price
         val chart: LineChart = view.item_chart
     }
-
-    private fun initChart(chart_details: LineChart, dataSets: ArrayList<ILineDataSet>) {
-        chart_details.data = LineData(dataSets)
-        chart_details.axisLeft.isEnabled = false
-        chart_details.axisLeft.spaceTop = 40f
-        chart_details.axisLeft.spaceBottom = 40f
-        chart_details.axisRight.isEnabled = false
-        chart_details.xAxis.isEnabled = false
-        chart_details.description.isEnabled = false
-        chart_details.legend.isEnabled = false
-        chart_details.setTouchEnabled(false)
-    }
 }
 
 data class ListItemTicker(
@@ -83,5 +74,5 @@ data class ListItemTicker(
     val id: Int,
     val title: String,
     val price: String,
-    val dataSets: ArrayList<ILineDataSet>
+    val dataLines: LineData?
 )

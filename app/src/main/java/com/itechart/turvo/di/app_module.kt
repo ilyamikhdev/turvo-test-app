@@ -3,7 +3,7 @@ package com.itechart.turvo.di
 import com.itechart.turvo.entity.Ticker
 import com.itechart.turvo.repository.Repository
 import com.itechart.turvo.repository.RepositoryImpl
-import com.itechart.turvo.ui.detail.DetailsViewModel
+import com.itechart.turvo.ui.details.DetailsViewModel
 import com.itechart.turvo.ui.list.ListViewModel
 import com.itechart.turvo.ui.main.MainViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel

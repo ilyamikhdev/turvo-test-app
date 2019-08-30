@@ -1,4 +1,4 @@
-package ru.mealty.di
+package com.itechart.turvo.di
 
 import android.util.Log
 import com.itechart.turvo.BuildConfig
