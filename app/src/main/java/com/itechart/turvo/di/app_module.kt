@@ -1,7 +1,8 @@
 package com.itechart.turvo.di
 
+import com.itechart.turvo.BuildConfig
 import com.itechart.turvo.entity.Ticker
-import com.itechart.turvo.repository.Repository
+import com.itechart.turvo.repository.RepositoryDummyImpl
 import com.itechart.turvo.repository.RepositoryImpl
 import com.itechart.turvo.ui.details.DetailsViewModel
 import com.itechart.turvo.ui.list.ListViewModel
@@ -11,7 +12,12 @@ import org.koin.dsl.module
 
 
 val appModule = module {
-    single<Repository> { RepositoryImpl(get()) }
+    single {
+        when {
+            BuildConfig.IS_DUMMY -> RepositoryDummyImpl()
+            else -> RepositoryImpl(get())
+        }
+    }
     viewModel { (tickers: String) -> ListViewModel(tickers, get()) }
     viewModel { (item: Ticker) -> DetailsViewModel(item) }
     viewModel { MainViewModel() }
